@@ -1,342 +1,247 @@
-# Multiples-ping
-# Multi-Ping Network Monitoring Tool
+# Multi-Ping Network Tool 🌐
 
-A Java-based network utility for pinging multiple hosts simultaneously with real-time statistics and planned GUI support.
+A simple Java application that pings multiple hosts (websites or IP addresses) and shows you which ones are reachable and how fast they respond.
 
-[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
-[![Maven](https://img.shields.io/badge/Maven-3.8+-blue.svg)](https://maven.apache.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Java](https://img.shields.io/badge/Java-17+-orange.svg)
 
 ---
 
-## 📖 Overview
+## 🤔 What Does This Do?
 
-Multi-Ping is a network monitoring tool designed to simplify the process of checking connectivity to multiple hosts. Instead of manually pinging each server or IP address individually, this tool automates the entire process, providing comprehensive statistics and insights into your network's health.
+Instead of manually pinging servers one by one in your terminal, this tool:
+- ✅ Pings multiple hosts at once
+- 📊 Shows you packet loss percentage
+- ⚡ Displays average response time (RTT)
+- 🎨 Provides a nice graphical interface (GUI version)
+- 📁 Can read hosts from a text file (CLI version)
 
-**Perfect for:**
-- System administrators monitoring server availability
-- Network engineers testing connectivity
-- DevOps teams checking infrastructure health
-- Anyone needing to ping multiple hosts efficiently
-
----
-
-## ✨ Features
-
-### Current Features (v1.0)
-
-- 🚀 **Concurrent Ping Execution** - Ping multiple hosts simultaneously for faster results
-- 📊 **Detailed Statistics** - Packet loss percentage and average RTT for each host
-- 📁 **File-Based Input** - Load IP addresses from text files (one per line)
-- 🔍 **Flexible Target Support** - Works with IP addresses and hostnames
-- 🖥️ **Cross-Platform** - Supports Linux, macOS, and Windows
-- 📈 **Summary Reports** - Get overview statistics across all targets
-- ⚡ **Fast & Efficient** - Thread-pool based execution with configurable concurrency
-- 💬 **Clear Output Format** - Easy-to-read results at a glance
-
-### 🎨 Planned Features (v2.0 - GUI)
-
-- 🖼️ **Graphical User Interface** - Modern, intuitive UI for easy interaction
-- 📝 **Interactive Host Management** - Add/remove/edit hosts directly in the GUI
-- 📊 **Real-Time Visualization** - Live charts showing ping statistics
-- 🔔 **Alert System** - Desktop notifications for unreachable hosts
-- 💾 **History Tracking** - Save and review past ping sessions
-- 🎯 **Target Groups** - Organize hosts into logical groups (servers, routers, etc.)
-- 🌗 **Dark/Light Theme** - Comfortable viewing in any environment
-- 📤 **Export Results** - Save reports as CSV, JSON, or PDF
-- ⏰ **Scheduled Monitoring** - Automatic periodic pings with logging
-- 📍 **Network Topology View** - Visual representation of monitored hosts
+**Perfect for checking if your servers, websites, or network devices are online!**
 
 ---
 
-## 🛠️ Technical Requirements
+## 📦 What You Need
 
-### Prerequisites
+- **Java 17 or higher** installed on your computer
+  - Check by running: `java -version`
+  - Download from: [https://www.oracle.com/java/technologies/downloads/](https://www.oracle.com/java/technologies/downloads/)
 
-- **Java Development Kit (JDK)**: Version 17 or higher
-- **Maven**: Version 3.8 or higher
-- **Operating System**: Linux, macOS, or Windows
-- **Network Access**: Ability to send ICMP packets (may require admin/root on some systems)
-
-### System Permissions
-
-On Linux/macOS, ping commands typically require elevated privileges. You may need to:
-- Run with `sudo` (not recommended for production)
-- Configure capabilities: `sudo setcap cap_net_raw+ep $(which ping)`
-- Use the tool as-is (Java executes system ping which handles permissions)
+That's it! No other dependencies needed.
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Files Explained
 
 ```
-network-admin-tp1/
-├── src/
-│   ├── main/
-│   │   ├── java/com/network/tp1/
-│   │   │   ├── Main.java              # Application entry point
-│   │   │   ├── PingExecutor.java      # Executes ping commands
-│   │   │   ├── PingResult.java        # Data model for results
-│   │   │   ├── PingParser.java        # Parses ping output
-│   │   │   └── IPFileReader.java      # Reads IP files
-│   │   └── resources/
-│   └── test/
-│       └── java/
-├── ips.txt                             # Sample IP address file
-├── pom.xml                             # Maven configuration
-└── README.md                           # This file
+src/main/java/org/example/
+├── Main.java           # Simple command-line version (reads from ips.txt)
+├── PingAppGUI.java     # Graphical interface with progress bar
+├── PingService.java    # Does the actual pinging work
+└── Host.java           # Stores information about each host
 ```
+
+### What Each File Does:
+
+- **Main.java**: Basic version - reads IPs from `ips.txt` file and pings them one by one
+- **PingAppGUI.java**: Visual version with a window, buttons, table, and progress bar
+- **PingService.java**: The "engine" that actually runs ping commands and reads results
+- **Host.java**: Simple data holder for IP address, packet loss, RTT, etc.
 
 ---
 
-## 🚀 Installation
+## 🚀 How to Run
 
-### Method 1: Clone and Build
+### Option 1: Run the GUI Version (Recommended)
+
+1. **Open your IDE** (IntelliJ IDEA, Eclipse, VS Code)
+2. **Open the project folder**
+3. **Run `PingAppGUI.java`**
+4. A window will appear - enter IPs or domains separated by commas:
+   ```
+   google.com, 8.8.8.8, github.com
+   ```
+5. Click **"Start Ping"** and watch the magic happen! 🎉
+
+### Option 2: Run the Command-Line Version
+
+1. **Create a file called `ips.txt`** in your project root:
+   ```
+   google.com
+   8.8.8.8
+   github.com
+   192.168.1.1
+   ```
+
+2. **Run `Main.java`** from your IDE
+
+3. **See results in the console**:
+   ```
+   Pinging google.com...
+   google.com => 100%, 12.456 ms
+
+   Pinging 8.8.8.8...
+   8.8.8.8 => 100%, 14.223 ms
+   ```
+
+### Option 3: Build and Run from Terminal
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/multiping-tool.git
-cd multiping-tool
+# Compile all files
+javac -d bin src/main/java/org/example/*.java
 
-# Build with Maven
-mvn clean package
+# Run GUI version
+java -cp bin org.example.PingAppGUI
 
-# Run the application
-java -jar target/tp1-multiping-1.0-SNAPSHOT.jar
+# OR run CLI version
+java -cp bin org.example.Main
 ```
-
-### Method 2: Import into IDE
-
-**IntelliJ IDEA:**
-1. File → Open → Select project folder
-2. Maven will auto-import dependencies
-3. Run `Main.java`
-
-**Eclipse:**
-1. File → Import → Existing Maven Projects
-2. Select project folder
-3. Right-click `Main.java` → Run As → Java Application
-
-**VS Code:**
-1. Open folder in VS Code
-2. Install "Extension Pack for Java"
-3. Maven will auto-configure
-4. Run from Run & Debug panel
 
 ---
 
-## 💻 Usage
+## 🎯 Understanding the Results
 
-### Basic Usage
+### GUI Version
 
-1. **Create an IP list file** (or use the provided `ips.txt`):
-```text
-# My servers
-192.168.1.1
-8.8.8.8
-google.com
-github.com
+The table shows 4 columns:
+
+| Column | Meaning | Example |
+|--------|---------|---------|
+| **IP** | The host you pinged | `google.com` |
+| **Packet Received %** | How many packets got through | `100%` (all received) |
+| **Avg RTT (ms)** | Average response time | `12.45 ms` (fast!) |
+| **Reachable** | Is the host online? | `Yes` or `No` |
+
+- **100% received** = Perfect connection ✅
+- **0% received** = Host is down or unreachable ❌
+- **RTT = +∞** = No response (unreachable)
+- **Low RTT** (< 50ms) = Fast connection ⚡
+- **High RTT** (> 200ms) = Slow connection 🐌
+
+### CLI Version Output
+
 ```
-
-2. **Run the tool**:
-```bash
-java -jar target/tp1-multiping-1.0-SNAPSHOT.jar ips.txt
-```
-
-3. **View results**:
-```
-=== TP1 Multi-Ping Tool ===
-
-Loaded 4 IP addresses from: ips.txt
-Starting ping operations...
-
-Pinging 192.168.1.1...
-Pinging 8.8.8.8...
-Pinging google.com...
-Pinging github.com...
-
-=== Results ===
-192.168.1.1 => 100%, 0.817 ms
-8.8.8.8 => 100%, 14.223 ms
 google.com => 100%, 12.456 ms
-github.com => 100%, 23.789 ms
+```
+Means:
+- ✅ All 4 packets were received (100%)
+- ⚡ Average round-trip time was 12.456 milliseconds
 
-=== Summary ===
-Total hosts:      4
-Reachable:        4
-Unreachable:      0
-Errors:           0
-Average RTT:      12.821 ms
+```
+192.168.1.99 => 0%, +∞
+```
+Means:
+- ❌ No packets received (0%)
+- 🔴 Host is unreachable (infinite RTT)
+
+---
+
+## 🎨 GUI Features
+
+### Progress Bar
+- Shows **real-time progress** as hosts are being pinged
+- Updates smoothly from 0% to 100%
+- Displays current host being tested
+
+### Buttons
+- **Start Ping** (Green) - Begin pinging the hosts you entered
+- **Clear** (Gray) - Clear the results table and input field
+
+### Color Coding
+- 🟢 Green "Yes" = Host is reachable
+- 🔴 Red "No" = Host is unreachable
+
+---
+
+## 💡 Example Usage
+
+### Testing Your Home Network
+```
+192.168.1.1     # Your router
+192.168.1.10    # Your computer
+192.168.1.20    # Your printer
 ```
 
-### Command-Line Options
-
-```bash
-# Use default ips.txt file
-java -jar multiping.jar
-
-# Use custom IP file
-java -jar multiping.jar /path/to/custom-ips.txt
-
-# Run specific class (development)
-mvn exec:java -Dexec.mainClass="com.network.tp1.Main"
+### Testing Internet Connectivity
 ```
-
-### IP File Format
-
-The IP list file supports:
-- **IPv4 addresses**: `192.168.1.1`
-- **Hostnames**: `google.com`, `server.example.com`
-- **Comments**: Lines starting with `#`
-- **Empty lines**: For readability
-
-Example:
-```text
-# Production Servers
-192.168.1.10    # Web Server
-192.168.1.11    # Database Server
-
-# External Services
 8.8.8.8         # Google DNS
 1.1.1.1         # Cloudflare DNS
+google.com      # Google website
+```
 
-# Development
-localhost
+### Testing Your Servers
+```
+myserver.com
+api.myapp.com
+database.myapp.com
 ```
 
 ---
 
-## 🔧 Configuration
+## 🔧 How It Works (Simple Explanation)
 
-Edit these constants in `Main.java` to customize behavior:
+1. **You enter** an IP address or domain name
+2. **The program runs** your computer's built-in `ping` command
+3. **It sends 4 packets** to the target host
+4. **It waits** for responses
+5. **It counts** how many came back
+6. **It calculates** the average time it took
+7. **It shows you** the results in a nice format
 
-```java
-// Maximum number of concurrent ping operations
-private static final int MAX_CONCURRENT_PINGS = 10;
-
-// Default IP file if none specified
-private static final String DEFAULT_IP_FILE = "ips.txt";
-```
-
-Edit `PingExecutor.java` for ping parameters:
-
-```java
-// Number of packets to send per ping
-private static final int PING_COUNT = 4;
-
-// Timeout in seconds
-private static final int TIMEOUT_SECONDS = 10;
-```
-
-
-
-## 🏗️ Implementation Details
-
-### Architecture
-
-The application follows a modular design with clear separation of concerns:
-
-1. **Main.java** - Orchestrates the application flow
-2. **PingExecutor.java** - Handles system command execution
-3. **PingParser.java** - Extracts statistics from ping output
-4. **PingResult.java** - Data transfer object for results
-5. **IPFileReader.java** - File I/O operations
-
-### Key Design Decisions
-
-#### ✅ Using System Ping Command
-We use the native OS `ping` command via `Runtime.exec()` rather than implementing raw ICMP sockets because:
-- **Simplicity**: No need for JNI or external libraries
-- **Cross-platform**: Works on Linux, Mac, and Windows
-- **Permissions**: System ping handles privileges automatically
-- **Reliability**: Mature, well-tested implementation
-- **TP Specification**: The assignment explicitly allows this approach
-
-#### ✅ Concurrent Execution
-Uses Java's `ExecutorService` with a fixed thread pool:
-- Pings multiple hosts simultaneously
-- Configurable concurrency limit (default: 10)
-- Non-blocking, efficient resource usage
-
-#### ✅ Cross-Platform Parsing
-Supports both Linux/Mac and Windows ping output formats:
-- **Linux/Mac**: `rtt min/avg/max/mdev = ...`
-- **Windows**: `Average = ...ms`
-
-### Libraries Used
-
-- **Java Standard Library**: For all core functionality
-- **No external dependencies**: Pure Java implementation
-- **JUnit 5** (optional): For unit testing
-
-This approach keeps the project lightweight and educational, focusing on understanding network operations rather than library complexity.
+Think of it like throwing 4 balls at a wall and measuring:
+- How many bounced back? (Packet received %)
+- How long did each take? (RTT)
 
 ---
 
-## ⚠️ Known Limitations
+## ⚠️ Common Issues
 
-1. **System Dependency**: Requires `ping` command to be available on the system
-2. **Parsing Fragility**: Ping output format varies across OS versions
-3. **No Raw ICMP**: Doesn't construct packets from scratch (see TP2 for that)
-4. **IPv6 Support**: Currently only handles IPv4 addresses
-5. **Firewall Issues**: Some networks block ICMP packets
+### "Command not found" or Permission Denied
+- **Solution**: Make sure `ping` command works in your terminal first
+- On Linux/Mac: Try `ping -c 4 google.com`
+- On Windows: Try `ping -n 4 google.com`
 
----
+### All hosts show as unreachable
+- **Solution**: Check your internet connection
+- Try pinging `127.0.0.1` (your own computer) first
 
-## 🚀 Roadmap
+### GUI window doesn't appear
+- **Solution**: Make sure you're running `PingAppGUI.java`, not `Main.java`
+- Check that Java GUI libraries are installed (usually included with JDK)
 
-### Phase 1: Core CLI (✅ Complete)
-- [x] Basic ping execution
-- [x] File-based input
-- [x] Statistics calculation
-- [x] Concurrent execution
-- [x] Cross-platform support
-
-### Phase 2: GUI Development (🔄 In Progress)
-- [ ] JavaFX-based graphical interface
-- [ ] Interactive host list management
-- [ ] Real-time ping visualization
-- [ ] Charts and graphs
-- [ ] Alert notifications
-
-### Phase 3: Advanced Features (📋 Planned)
-- [ ] Continuous monitoring mode
-- [ ] Data export (CSV, JSON, PDF)
-- [ ] Historical data tracking
-- [ ] Network topology visualization
-- [ ] Integration with TP3 (NIDS) and TP4 (DNS)
-
-### Phase 4: Enterprise Features (💭 Future)
-- [ ] REST API for remote access
-- [ ] Web dashboard
-- [ ] Email/SMS alerts
-- [ ] Database integration
-- [ ] Multi-user support
+### Progress bar stays at 0%
+- **Solution**: The ping might be taking time - wait a few seconds
+- Some hosts may be slow to respond or blocking pings
 
 ---
 
-## 🤝 Contributing
+## 🎓 Learning Points (From TP Assignment)
 
-Contributions are welcome! This is an educational project, but improvements are always appreciated.
-
-### How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-
-
-## 🙏 Acknowledgments
-
-- **Course**: Administration Réseau - Master IDL (GLIA)
-- **Assignment**: TP1 - Multiples Ping
-- **Institution**: Université Blaise Pascal Clermont-Ferrand
-- Inspired by network administration best practices and tools like `fping` and `nmap`
+This project demonstrates:
+- ✅ **Exercice 1**: Single host ping with statistics
+- ✅ **Exercice 2**: Packet loss % and average RTT calculation
+- ✅ **Exercice 3**: Multiple hosts from file
+- ✅ **Bonus**: GUI with progress tracking and real-time updates
 
 ---
 
+## 📝 Quick Start Checklist
 
-**⭐ Star this repository if you find it helpful!**
+- [ ] Install Java 17+
+- [ ] Open project in IDE
+- [ ] Run `PingAppGUI.java`
+- [ ] Enter some hosts (e.g., `google.com, 8.8.8.8`)
+- [ ] Click "Start Ping"
+- [ ] Watch the results appear!
+
+---
+
+## 🤝 Need Help?
+
+- **Java not installed?** → [Download Java](https://www.oracle.com/java/technologies/downloads/)
+- **IDE not working?** → Try IntelliJ IDEA Community (free)
+- **Still stuck?** → Check that `ping` works in your terminal first
+
+---
+
+**Made for the Network Administration course (Master IDL - GLIA) 🎓**
+
+*Simple, effective, and educational network monitoring!*
