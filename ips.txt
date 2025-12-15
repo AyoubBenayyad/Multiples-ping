@@ -1,3 +1,4 @@
 amazon.com
 8.8.8.8
 bbc.co.uk
+google.com
